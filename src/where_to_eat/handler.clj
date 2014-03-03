@@ -1,4 +1,5 @@
 (ns where-to-eat.handler
+  (:use [hiccup.bootstrap.middleware])
   (:require [compojure.core :refer [defroutes routes]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
@@ -20,6 +21,7 @@
 (def app
   (-> (routes home-routes app-routes)
       (handler/site)
+      (wrap-bootstrap-resources)
       (wrap-base-url)))
 
 

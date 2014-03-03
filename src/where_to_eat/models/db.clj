@@ -13,8 +13,7 @@
     (sql/create-table 
      :restaurants
      [:id "integer primary key autoincrement"]
-     [:name "text"]
-     [:gmt_create "timestamp default_timestamp"])
+     [:name "text"])
     (sql/create-table
      :selection_log
      [:id "integer primary key autoincrement"]
@@ -29,7 +28,8 @@
     db
     (sql/with-query-results res
       ["select * from restaurants"]
-      (doall res))))
+      (for [record (doall res)]
+        (:name record)))))
 
 (defn todays-selection []
   (let [tommorrow (-> (t/today-at-midnight)

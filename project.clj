@@ -7,7 +7,8 @@
                  [ring-server "0.3.0"]
                  [org.clojure/java.jdbc "0.2.3"]
                  [org.xerial/sqlite-jdbc "3.7.2"]
-                 [clj-time "0.6.0"]]
+                 [clj-time "0.6.0"]
+                 [hiccup-bootstrap "0.1.2"]]
   :plugins [[lein-ring "0.8.7"]]
   :ring {:handler where-to-eat.handler/app
          :init where-to-eat.handler/init
