@@ -9,17 +9,12 @@
             [where-to-eat.views.layout :as layout]
             [where-to-eat.models.db :as db]
             [clj-time.format :refer [formatter]]
-            [clj-time.core :refer [now today-at-midnight]]))
+            [clj-time.core :refer [now]]))
 
 (defn home []
   (let [restaurants (db/all-restaurants)
         recent (db/recent-selections)
-        s (-> recent
-              first
-              :gmt_create
-              from-long
-              .toDateMidnight
-              (= (today-at-midnight)))]
+        selected (> (count recent) 0)]
     (layout/common
      [:div.page-header
       [:h2 "今天是" (.print
@@ -31,7 +26,7 @@
                         [:li e])]]
       [:div.col-lg-3 (image {:class "img-thumbnail"} "/images/logo.jpg")]]
      (form-to {:role "form"} [:post "/"]
-              (if s
+              (if selected
                 [:p "决定了！今天我们就去 " [:span.label.label-success
                                              (:name (first recent))] "  吃饭！"]
                 [:p "今天还没选的哦，亲！"])
@@ -44,7 +39,7 @@
                      to-local-date-time
                      (.toString "yyyy-MM-dd HH:mm:ss")
                      (->> (format "（%s）")))])
-              (if (not s)
+              (if (not selected)
                 [:button.btn.btn-primary.btn-lg {:type "submit"}
                  [:span.glyphicon.glyphicon-hand-left] "走你"])))))
 
