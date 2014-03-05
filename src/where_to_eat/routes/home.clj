@@ -14,12 +14,14 @@
 (defn home []
   (let [restaurants (db/all-restaurants)
         recent (db/recent-selections)
-        s (-> recent
-              first
-              :gmt_create
-              from-long
-              .toDateMidnight
-              (= (today-at-midnight)))]
+        s (if (> (count recent) 0) 
+            (-> recent
+                first
+                :gmt_create
+                from-long
+                .toDateMidnight
+                (= (today-at-midnight)))
+            false)]
     (layout/common
      [:div.page-header
       [:h2 "今天是" (.print
